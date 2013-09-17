@@ -1,0 +1,229 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/hello_world" />
+
+    <ToggleButton
+        android:id="@+id/tglPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+        android:text="@string/play_toggle_label" />
+
+    <SeekBar
+        android:id="@+id/seek1Lo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tglPlay"
+        android:layout_toLeftOf="@+id/prg1" />
+
+     <SeekBar
+        android:id="@+id/seek1Hi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tglPlay"
+        android:layout_toRightOf="@+id/prg1" />
+    
+    <ProgressBar
+        android:id="@+id/prg1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="50sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tglPlay"
+        android:layout_centerHorizontal="true" />
+    
+ 
+    <TextView
+        android:id="@+id/txtAcc1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/prg1"
+        android:layout_alignRight="@+id/prg1"
+        android:layout_below="@+id/prg1"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:text="@string/blank"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#550000" />
+
+    <TextView
+        android:id="@+id/txtFreq1Lo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/seek1Lo"
+        android:layout_alignRight="@+id/seek1Lo"
+        android:layout_below="@+id/seek1Lo"
+        android:gravity="center_horizontal"
+        android:text="@string/blank"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/txtFreq1Hi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/seek1Hi"
+        android:layout_alignRight="@+id/seek1Hi"
+        android:layout_below="@+id/seek1Hi"
+        android:gravity="center_horizontal"
+        android:text="@string/blank"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+   
+
+    <ProgressBar
+        android:id="@+id/prg2"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="50sp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/seek2Lo" />
+    
+      <ProgressBar
+        android:id="@+id/prg3"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="50sp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/seek3Lo" />
+
+    <SeekBar
+        android:id="@+id/seek2Hi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/seek2Lo"
+        android:layout_toRightOf="@+id/prg2" />
+
+    <SeekBar
+        android:id="@+id/seek3Lo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtFreq2Lo"
+        android:layout_marginTop="30dp"
+        android:layout_toLeftOf="@+id/prg3" />
+
+    <TextView
+        android:id="@+id/txtAcc2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/prg2"
+        android:layout_alignRight="@+id/prg2"
+        android:layout_below="@+id/prg2"
+        android:gravity="center_horizontal"
+        android:text="@string/blank"
+        android:textColor="#005500"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <SeekBar
+        android:id="@+id/seek2Lo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtFreq1Lo"
+        android:layout_marginTop="30dp"
+        android:layout_toLeftOf="@+id/prg2" />
+
+    <TextView
+        android:id="@+id/txtFreq2Lo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/seek2Lo"
+        android:layout_alignRight="@+id/seek2Lo"
+        android:layout_below="@+id/txtAcc2"
+        android:gravity="center_horizontal"
+        android:text="@string/blank"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+ 
+     <TextView
+        android:id="@+id/txtFreq2Hi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/seek2Hi"
+        android:layout_alignRight="@+id/seek2Hi"
+        android:layout_below="@+id/seek2Hi"
+        android:gravity="center_horizontal"
+        android:text="@string/blank"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+     
+      <TextView
+        android:id="@+id/txtFreq3Lo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/seek3Lo"
+        android:layout_alignRight="@+id/seek3Lo"
+        android:layout_below="@+id/seek3Lo"
+        android:gravity="center_horizontal"
+        android:text="@string/blank"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+ 
+     <TextView
+        android:id="@+id/txtFreq3Hi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/seek3Hi"
+        android:layout_alignRight="@+id/seek3Hi"
+        android:layout_below="@+id/seek3Hi"
+        android:gravity="center_horizontal"
+        android:text="@string/blank"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+     
+    <TextView
+        android:id="@+id/txtAcc3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/seek3Lo"
+        android:layout_alignLeft="@+id/prg3"
+        android:layout_alignRight="@+id/prg3"
+        android:gravity="center_horizontal"
+        android:text="@string/blank"
+        android:textColor="#000055"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <SeekBar
+        android:id="@+id/seek3Hi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtFreq2Hi"
+        android:layout_alignTop="@+id/prg3" />
+
+    <!-- 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtFreq3Lo"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/circle"
+        android:contentDescription="@string/circle_1_desc"/>-->
+    
+  <TextView
+      android:id="@+id/txtCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txtFreq3Lo"
+        android:layout_marginTop="30dp"
+      android:background="@drawable/circle"
+      />
+  
+
+</RelativeLayout>
