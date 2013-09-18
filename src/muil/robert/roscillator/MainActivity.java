@@ -1,4 +1,4 @@
-package muil.robert.acceleratorsqueak;
+package muil.robert.roscillator;
 
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -18,7 +18,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-import muil.robert.acceleratorsqueak.FMOut;
+import muil.robert.acceleratorsqueak.R;
+import muil.robert.roscillator.FMOut;
 
 public class MainActivity extends Activity implements SensorEventListener, OnCheckedChangeListener, OnSeekBarChangeListener {
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package muil.robert.acceleratorsqueak;
+package muil.robert.roscillator;
 
 /**
  * @author robert
