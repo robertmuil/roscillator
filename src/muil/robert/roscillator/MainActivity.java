@@ -30,7 +30,7 @@ public class MainActivity extends Activity implements SensorEventListener, OnChe
 	public static final int [][] DefFRanges = {{100,700},{3000,4000},{6000,7000}};
 	
 	private SensorManager mSensorManager;
-	private Sensor mAcc;
+	private Sensor mAcc, mMag;
 	private FMOut mFM;
 	private TextView mTxtStatus;
 	private TextView mTxtAcc1, mTxtAcc2, mTxtAcc3, 
@@ -76,7 +76,8 @@ public class MainActivity extends Activity implements SensorEventListener, OnChe
 		
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		mAcc = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		
+		mMag = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
 		mFM = new FMOut(3);
 		mFM.setRanges(DefFRanges);
 		
@@ -112,7 +113,7 @@ public class MainActivity extends Activity implements SensorEventListener, OnChe
 		mSeek3Lo.setOnSeekBarChangeListener(this);
 		mSeek3Hi.setOnSeekBarChangeListener(this);
 		
-		if (mAcc != null){
+		if ((mAcc != null) & (mMag != null)){
 			mTxtStatus.setText(R.string.all_good);
 			Log.v("Shyit", "Everyfing goood y'aaall");
 		}
@@ -120,8 +121,8 @@ public class MainActivity extends Activity implements SensorEventListener, OnChe
 			mTxtStatus.setText(R.string.missing_accel_sensor);
 			
 			//Context context = getApplicationContext();
-			Toast.makeText(this, "No Accelerometer!", Toast.LENGTH_LONG).show();
-			Log.e("Shyit", "No bleedin' Accelerometer!");
+			Toast.makeText(this, "Missing Sensors!", Toast.LENGTH_LONG).show();
+			Log.e("Shyit", "Missing accelerometer or magnometer!");
 		}
 
 		
@@ -135,6 +136,8 @@ public class MainActivity extends Activity implements SensorEventListener, OnChe
 		Log.d("MainActivity", "onResume()");
 		super.onResume();
 		mSensorManager.registerListener(this, mAcc,
+				SensorManager.SENSOR_DELAY_FASTEST);
+		mSensorManager.registerListener(this, mMag,
 				SensorManager.SENSOR_DELAY_FASTEST);
 		
 		/*
@@ -189,32 +192,66 @@ public class MainActivity extends Activity implements SensorEventListener, OnChe
 		
 	}
 
+	float[] mGravity;
+	float[] mGeomagnetic;
+	float mOrientation[] = new float[3];  // orientation contains: azimut, pitch and roll
+	boolean mOrientationValid = false;
+	float [] normed = new float [3];
+	boolean mUseAccels = false;
 	@Override
 	public void onSensorChanged(SensorEvent arg0) {
-		double [] acc_norm = new double [3];
+		if (arg0.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+			mGravity = arg0.values;
+		if (arg0.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+			mGeomagnetic = arg0.values;
 		
-		/* normed, accels go from 0 (-ve gravity) to 1 (+ve gravity). silly */
-		for (int ii = 0; ii < 3; ii++) {
-			acc_norm[ii] = (arg0.values[ii]+SensorManager.GRAVITY_EARTH)/(2*SensorManager.GRAVITY_EARTH);
-			
-			mFM.updateSignal(ii, (float) acc_norm[ii]);
+		if (mGravity != null && mGeomagnetic != null) {
+			float R[] = new float[9];
+			float I[] = new float[9];
+			boolean success = SensorManager.getRotationMatrix(R, I,
+					mGravity, mGeomagnetic);
+			if (success) {
+				SensorManager.getOrientation(R, mOrientation);
+				mOrientationValid = true;
+			}
 		}
 		
+		if (mOrientationValid) {
+			/* normed, accels go from 0 (-ve gravity) to 1 (+ve gravity). silly */
+			for (int ii = 0; ii < 3; ii++) {
+				
+				if (mUseAccels) {
+					normed[ii] = (mGravity[ii]+SensorManager.GRAVITY_EARTH)/(2*SensorManager.GRAVITY_EARTH);
+				} else {
+					normed[ii] = ((mOrientation[ii] + (float)Math.PI)/(2*(float)Math.PI));
+				}
+			}
+		
+			mTxtAcc1.setText(String.format("%02.1f", mOrientation[0]));
+			mTxtAcc2.setText(String.format("%02.1f", mOrientation[1]));
+			mTxtAcc3.setText(String.format("%02.1f", mOrientation[2]));
+			
+			updateSignals(normed);
+		}
+	}
+	
+	private void updateSignals(float [] sigs) {
+	
+		for (int ii = 0; ii < 3; ii++) {
+			mFM.updateSignal(ii, (float) sigs[ii]);
+		}
 
 		GradientDrawable ss = (GradientDrawable) mCircle.getBackground();
-		ss.setColor(Color.argb(255, (int)(acc_norm[0]*255),
-				(int)(acc_norm[1]*255),
-				(int)(acc_norm[2]*255)));
+		ss.setColor(Color.argb(255, (int)(sigs[0]*255),
+				(int)(sigs[1]*255),
+				(int)(sigs[2]*255)));
 		//ss.setSize((int)(20+100*acc_norm[0]), 50);
 		
-		mTxtAcc1.setText(String.format("%02.1f", arg0.values[0]));
-		mTxtAcc2.setText(String.format("%02.1f", arg0.values[1]));
-		mTxtAcc3.setText(String.format("%02.1f", arg0.values[2]));
-		
-		mPrg1.setProgress((int) (acc_norm[0]*mPrg1.getMax()));
-		mPrg2.setProgress((int) (acc_norm[1]*mPrg2.getMax()));
-		mPrg3.setProgress((int) (acc_norm[2]*mPrg3.getMax()));
+		mPrg1.setProgress((int) (sigs[0]*mPrg1.getMax()));
+		mPrg2.setProgress((int) (sigs[1]*mPrg2.getMax()));
+		mPrg3.setProgress((int) (sigs[2]*mPrg3.getMax()));
 
+	
 	}
 
 	@Override

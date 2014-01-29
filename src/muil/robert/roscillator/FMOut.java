@@ -57,6 +57,7 @@ public class FMOut extends Thread {
 		mLocalBuffers = new short [numTracks][];
 		mFM = new FMUtils[numTracks];
 		mSigs = new float [numTracks];
+		mAmplitudes = 
 		
 		Log.i(TAG, 
 				"nativeOutputSampleRate="+AudioTrack.getNativeOutputSampleRate(
@@ -122,8 +123,6 @@ public class FMOut extends Thread {
 		//setPriority(MAX_PRIORITY);
 		//Log.w(TAG, "Updated ThreadPriority to "+this.getPriority());
 		
-		float fmAmplitude = (float) 0.1;
-
 		mPlaying = false;
 		
 		while(mAlive) {
@@ -135,8 +134,10 @@ public class FMOut extends Thread {
 				for(int sample = 0; sample < mLocalBuffers[0].length; sample++ ) {
 					short ss = 0;
 					for (int ii = 0; ii < numTracks; ii++) {
-						ss += (short)(Math.sin(mFM[ii].updateAngle())
-								* fmAmplitude * MaxAudioTrackSampleValue);
+						if (mSigs[ii] > 0) {
+							ss += (short)(Math.sin(mFM[ii].updateAngle())
+									* fmAmplitude * MaxAudioTrackSampleValue);
+						}
 					}
 					mLocalBuffers[0][sample] = ss;
 				}
@@ -188,6 +189,22 @@ public class FMOut extends Thread {
 			mSigs[which] = 0f;
 		else
 			mSigs[which] = newSig;
+		
+		//Log.v(TAG, "new mSig1="+mSig1);
+	}
+	
+	public void updateAmplitude(int which, float newAmp) {
+		if (which > numTracks) {
+			throw new IllegalArgumentException(
+					"attempted to update signal "+which +
+					" but numTracks="+numTracks+".");
+		}
+		if (newAmp > 1.0f)
+			mAmplitude[which] = 1.0f;
+		else if (newAmp < 0f)
+			mAmplitude[which] = 0f;
+		else
+			mAmplitude[which] = newAmp;
 		
 		//Log.v(TAG, "new mSig1="+mSig1);
 	}
